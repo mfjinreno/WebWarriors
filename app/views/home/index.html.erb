@@ -1,0 +1,52 @@
+
+  <!--Author: Michael Johnston 
+		Date created: 4/9/16
+
+    Edited by Nathan Borak - more content
+
+		Modified: Yuze Chen
+    Date modified: 4/12/2016
+        Add contest table
+-->
+<html lang="en">
+<head>
+<title>Welcome!</title>
+</head>
+<div class="jumbotron home-jumbotron">
+  <div class="container">
+    <h1>Authors - Web App Warriors</h1>
+    <p> Want to face off against your classmates?
+      <a class="btn btn-lg btn-primary" href="/game/index" role="button">Visit the Arena </a>
+    </p>
+  </div>
+</div>
+<hr class = "green">
+  <div class="container">
+     <% @user_stats = BugStat.joins("JOIN bugs ON bugs.id=bug_stats.bug_id") %>
+     <% @user = User.all %>
+
+    <% @bug_user= Bug.joins('JOIN users ON users.email=bugs.email') %>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="panel-heading leader">
+        <h3 class="leaderboard-header">Bug Contest</h3>
+      </div>
+
+      <table class="table">
+        <tr>
+          <th>Bugs</th>
+          <th>Username</th>
+          <th>Challenge</th>
+        </tr>
+
+        <%@bug_user.each do |bug|%>
+        <tr>
+          <td><%=bug.bug_name %></td>
+          <td><%=(@user.find_by email: bug.email).username%></td>
+          <td><a class="btn btn-primary btn-lg" href="game/index?bugid=<%=bug.id%>" role="button">Challenge</a></td>
+        </tr>
+        <%end%>
+      </table>
+    </div>
+
+
+  </div>

@@ -1,0 +1,353 @@
+<!-- Author: Lucas Rodriguez
+     Date Created: 4/12/16
+     Added all the HTML and the data bindings for the game
+     Tied in the JS and the backend data to run the game
+     
+     Edited: Michael Johnston
+     Styled list of bugs for user/opponents
+     Styled game table
+-->
+
+<div data-bind="ifnot: gameView().isRunning" class="select-bugs-container row">
+  <div class="jumbotron game-jumbotron">
+    <div class="container">
+      <center>
+        <h1>Welcome to the Arena!</h1>
+        <p>Pick your champion, challenge your opponent, and watch your code <em>fight</em>!</p>
+      </center>
+    </div>
+  </div>
+  <hr class = "green">
+  <div class = "col-xs-8 col-centered">
+    <div class="col-xs-4 game-padded">
+      <% if !@userBugs.blank? %>
+        <div class="row">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">My bugs</h3>
+            </div>            
+            <div class="panel-body">
+              <div class="tab-content">
+                <div class="tab-pane active" id="test">
+                  <!--Print all user-->
+                  <ul>
+                  <% @userBugs.each do |bug| %>
+                    <li data-bind="click: function(){userBugId(<%= bug.id %>)},
+                                     css: { green: userBugId() == <%= bug.id %> }">
+                        <%= bug.bug_name %>
+                    </li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="col-xs-4 right game-padded">
+      <% if !@allBugs.blank? %>
+        <div class="row">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Opponents</h3>
+            </div>            
+            <div class="panel-body">
+              <div class="tab-content">
+                <div class="tab-pane active" id="test">
+                  <!--Print all user-->
+                  <ul>
+                    <% @allBugs.each do |bug| %>
+                        <li data-bind="click: function(){opponentBugId(<%= bug.id %>)},
+                                       css: { green: opponentBugId() == <%= bug.id %> }">
+                          <%= bug.bug_name %>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>    
+      <% end %>
+    </div>
+  </div>
+</div>
+<!--/gameview hidden when running-->
+<!--start game area-->
+<div data-bind="with: gameView" class="row padded-top">
+  <div class="col-xs-offset-2 col-xs-8 game-container">
+    <!-- ko if: isRunning -->
+    <h3 data-bind="text: 'Round ' + roundsPlayed() +'/200'"></h3>
+    <table>
+      <tbody data-bind="foreach: board">
+        <tr data-bind="foreach: $data">
+          <td class="bug-image-container" data-bind="style: { backgroundColor: rgb }">
+            <!-- ko if: isBug -->
+            <div class ="rotate-image" data-bind="style: {'transform': rotation}">
+              <div class="image-container" data-bind="style: { backgroundImage: $root.getImage(headId()) }"></div>
+              <div class="image-container" data-bind="style: { backgroundImage: $root.getImage(bodyId()) }"></div>
+            </div>
+            <!-- /ko -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- /ko -->
+    <div class="row">
+      <div class="col-xs-12">
+        <button type="button" class="pull-left btn btn-primary btn-lg" data-bind="click: $parent.stopGame">Stop!</button>
+        <button type="button" class="pull-right btn btn-primary btn-lg" data-bind="click: $parent.runGame">Play!</button>
+      </div>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+
+
+
+<script type="text/javascript">
+  // A view model for selecting which bugs to fight
+  var SelectBugsView = function(){
+    var self = this;
+
+    // The bug that the current user has selected
+
+    self.userBugId = ko.observable(<%= @selectedUserBugId.present? ? @selectedUserBugId : false  %>);
+
+    // The bug that the current user has selected to fight
+    //self.opponentBugId = ko.observable(<%= @selectedOpponentBugId.present? ? @selectedUserBugId : false %>);
+
+
+    <% if(params[:bugid]) %>
+    <%    puts(params[:bugid]) %>
+        self.opponentBugId = ko.observable(<%= params[:bugid]%>);
+    <% else%>
+        self.opponentBugId = ko.observable(<%= @selectedOpponentBugId.present? ? @selectedUserBugId : false %>);
+    <% end%>
+
+    <% if(@selectedOpponentBugId).present?%>
+        self.opponentBugId = ko.observable(<%= @selectedOpponentBugId.present? ? @selectedUserBugId : false %>);
+    <% end%>
+
+    // The view of the game
+    self.gameView = ko.observable(new GameView(10, 10));
+
+    // Makes an ajax call to get all of the bug images
+    self.bugImages;
+    $.ajax({
+      dataType: "json",
+      url: "/game/images",
+      success: function(data){
+        self.bugImages = data;
+      }
+    });
+
+    // Used in data-binding to show the images of the bugs
+    self.getImage = function(id){
+      if(id){
+        var image = self.bugImages.filter(function(el){
+          return id == el.id;
+        })[0].image;
+        return "url(\"" + encodeURI(image) + "\")";
+      }
+    };
+
+    // A function that will start to run the game
+    self.runGame = function(){
+
+      // If two bugs have not been selected doesn't do anything
+      if(self.userBugId() || self.opponentBugId()){
+      
+      	// Gets the bug code of selected user bug
+        var userBug;
+        var userBugCall = $.ajax({
+          dataType: "json",
+          url: "/game/bug",
+          data: { bugId: self.userBugId() },
+          success: function(data){
+            userBug = data[0];
+          }
+        });
+
+		// Gets the bug code of the selecter opponent bug
+        var oppBug;
+        var opponentBugCall = $.ajax({
+          dataType: "json",
+          url: "/game/bug",
+          data: { bugId: self.opponentBugId() },
+          success: function(data){
+            oppBug = data[0];
+          }
+        });
+
+		// Waits for both of the calls to finish and the starts the game
+        $.when(userBugCall, opponentBugCall).done(function(){
+          self.gameView().runGame([userBug, oppBug]);
+        });
+      }
+    };
+
+    self.gameFinished = function(winnerId){
+      $.ajax({
+        dataType: "text",
+        url: "/game/postwin",
+        data: {
+          winnerId: winnerId,
+          loserId: (self.userBugId() == winnerId)? self.opponentBugId() : self.userBugId()
+        },
+        success: function(data){
+          console.log(data);
+        }
+      });
+      
+    };
+    
+    // A call back function for when the the end of the game is reached
+    // If the game has ended from actually ending it will make a call
+    // to the back end to update the bugs stats
+    self.gameView().endOfGame.subscribe(function(){
+    	var endOfGame = self.gameView().endOfGame;
+    	var gameRunning = self.gameView().isRunning;
+    	if(endOfGame() && gameRunning()){    		
+	    	self.gameView().stopGame(self.gameFinished);
+	    }
+	});
+
+	// Function the stop button calls
+    self.stopGame = function(){ 
+    	self.gameView().stopGame(self.gameFinished);
+    };
+  };
+
+	// A view representing the game
+  var GameView = function(size, bugCount){
+    var self = this;
+    self.size = size;
+    self.bugCount = bugCount;
+    self.maxRounds = 199;
+
+	// Sets up an array of observables for all board pieces
+    self.board = new Array(self.size);
+    for(var i = 0; i < self.size; i++){
+      self.board[i] = new Array(self.size);
+      for(var j = 0; j < self.size; j++) {
+        self.board[i][j] = new BugView();
+      }
+    }
+
+    self.gameInterval;
+    self.game;
+    self.startOfGame = true;
+    self.isRunning = ko.observable(false);
+    self.roundsPlayed = ko.observable(0);
+    self.endOfGame = ko.observable(false);
+
+	// Function used to run the game
+    self.runGame = function(bugs){
+      if(self.isRunning()) { return; }
+      self.isRunning(true);
+      self.roundsPlayed(0);
+      self.endOfGame(false);
+
+		// Makes the game
+      self.game = new GameController(bugs, size, bugCount);
+      // If error with game doesn't do anything
+      if(self.game === undefined)
+      {
+        console.error("There was an error initializing the game");
+        return undefined;
+      }
+
+		// A reoccuring function call that runs each round
+      self.gameInterval = setInterval(function(){
+        if(!self.startOfGame){
+          self.game.runRound();
+        } else{
+          self.startOfGame = false;
+        }
+
+		// A check to see if the game is finished or the max number
+		// of rounds has been reached
+        if(self.roundsPlayed() > self.maxRounds || self.game.isOver){
+	        self.endOfGame(true);
+	        return;
+	      }
+
+		// Updates the board
+        var board = self.game.getBoard();
+        board.forEach(function(row, rowIndex){
+          row.forEach(function(bug, bugIndex){
+            var bugView = self.board[rowIndex][bugIndex];
+            bugView.team(bug ? bug.team : null);
+            bugView.direction(bug ? bug.direction : null);
+            bugView.bodyId(bug.bodyId);
+            bugView.headId(bug.headId);
+            bugView.rgb(bug.rgb);
+          })
+        });
+        self.roundsPlayed(self.roundsPlayed() + 1);
+      }, 100);
+    };
+
+	// A function used to stop the game
+	// If it was the cause someone won it will make a backend
+	// submission to update the bug stats
+    self.stopGame = function(submitScore){
+      clearInterval(self.gameInterval);
+      if(self.endOfGame() && self.isRunning()){
+      	submitScore(self.game.getWinner());
+      	setTimeout(function(){self.isRunning(false);}, 10000);
+      } else {
+      	self.isRunning(false);
+      }      
+      self.startOfGame = true;
+      self.game = undefined;
+      self.endOfGame(false);
+    };
+  };
+
+	// A view of a bug
+  var BugView = function(team, direction){
+    var self = this;    
+    self.team = ko.observable(team);
+    self.direction = ko.observable(direction);
+    self.headId = ko.observable();
+    self.bodyId = ko.observable();
+    self.rgb = ko.observable();
+    self.isBug = ko.computed(function() {
+      return !(self.team() == null && !self.direction());
+    });
+    self.color = ko.computed(function() {
+      return self.isBug() ?
+          (self.team() ? BugsTeam.Blue : BugsTeam.Red) :
+          'transparent';
+    });
+    
+    // Calculated the bugs rotation based on direction it is
+    // facing
+    self.rotation = ko.computed(function(){
+      switch(self.direction()){
+        case BugsMoves.Left:
+          return 'rotate(270deg)';
+          break;
+        case BugsMoves.Right:
+          return 'rotate(90deg)';
+          break;
+        case BugsMoves.Down:
+          return 'rotate(180deg)';
+          break;
+        case BugsMoves.Up:
+        default:
+          return 'rotate(0deg)';
+          break;
+      }
+    });
+  };
+
+  $(document).ready(function(){
+    ko.applyBindings(new SelectBugsView());
+  });
+</script>

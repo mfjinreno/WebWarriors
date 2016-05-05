@@ -1,0 +1,123 @@
+<!--Author: Michael Johnston 
+		Date created: 4/9/16
+	Edited by Nathan Borak:
+	Added profile pictures, sql logic, bugs, button paths
+-->
+
+<div class="jumbotron profile-jumbotron">
+  <div class = "container">
+    <div class = "row">
+
+      <!--welcome column-->
+      <div class="col-m-4 col-sm-6">
+	    <h1>Ready, set, code!</h1>
+	    <p>Test your logic and programming skills against other players in 1v1 <em>code combat.</em></p>
+	    <p><a class="btn btn-primary btn-lg" href="/game/index" role="button">Visit the arena</a></p>
+	  </div>
+
+	  <!-- profile info-->
+	  	<div class = "pull-right" >
+			<div class = "row">
+			  <div class ="profile-header">
+				<div class = "profile-container">
+				  <div class = "profile-img">
+				  	<div class = "table">
+					  	<%if current_user.avatar%>
+					  	<ul id = "horizontal-list"><li class = "round-image"><%=image_tag(current_user.avatar.url(:thumb))%></li></ul>
+					  	<%else%>
+					  	<ul id = "horizontal-list"><li class = "round-image"><img src = "/app/assets/images/default_profile.jpg" alt = "default"></li></ul>
+					  	<%end%>
+				  	</div>
+					<div class="rank-label-container">
+               <a class =  "label" href = "/edit"><span class="label label-default rank-label">edit profile</span></a>
+            </div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+			<!--/row-->
+			<div class = "row info-container">
+			  <div class = "profile-info">
+				<h3 class = "profile-name"><%=current_user.username%></h3>
+				<div class = "list-group">
+				  <div class = "panel panel-default">
+				  	<div class = "panel-body">
+				    	<p class = "list-group-item-text">Email: <%= current_user.email%></p>
+				    </div>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  <!--/row info-container-->
+		</div>
+		<!--/pull-right-->
+	</div>
+  </div>
+</div>
+<!--/jumbotron-->
+<hr class = "green">
+<!--profile content-->
+<div class = "container">
+  <div class = "row">
+  	<h3>Battle Panel</h3>
+	  <div class = "panel panel-default">
+		  <div class = "panel-body">
+		  	<!--my bugs list-->
+		  	<div class = "col-md-4 col-sm-4">
+		  		<h4>Bugs</h4>
+					<ul class="list-group">
+					<%Bug.all.each do |bug|%>
+					<%if bug.email == current_user.email %>
+					  <li class="list-group-item"><%=bug.bug_name%>	<a class="btn btn-primary btn-sm battle-btn" href="/game/index" role="button">Battle</a></li>
+					<%end%>
+					<%end%>  
+					</ul>
+					<br/>
+					<p><a class="btn btn-primary btn-sm" href="/creator/index" role="button">Create</a></p>
+				</div>
+				<!--stats container-->
+				<div class = "col-md-8 col-sm-8">
+					<h4>Stats</h4>
+					<div class = "panel panel-default panel-grey ">
+						<div class = "panel-body">
+							
+							<% @user_stats = BugStat.joins("JOIN bugs ON bugs.id=bug_stats.bug_id") %>
+       						 <%@user = User.all %>
+       						 <%max_rank = 10000%>
+       						 <%max_current_streak = 0%>
+       						 <%max_longest_streak = 0%>
+       						 <%@user_stats.where('rank is not null').order(rank: :asc).each do |bugstat|%>
+       						 		<%if (@user.find_by email: bugstat.bug.email).username == current_user.username%>
+       						 			<%if bugstat.rank < max_rank%>
+       						 				<%max_rank = bugstat.rank%>
+       						 			<%end%>
+       						 			<%if bugstat.current_streak > max_current_streak%>
+       						 				<%max_current_streak = bugstat.current_streak%>
+       						 			<%end%>
+       						 			<%if bugstat.longest_streak > max_longest_streak%>
+       						 				<%max_longest_streak = bugstat.longest_streak%>
+       						 			<%end%>
+       						 		<%end%>
+       						 <%end%>
+
+       				<div class ="col-md-4 col-sm-4">
+								Online Record: <%@wins = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:wins)%> <% if @wins.is_a? Integer %> <%=@wins%> <%else%> 0 <%end%> win / <%@losses = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:losses)%> <% if @losses.is_a? Integer %> <%=@losses%> <%else%> 0 <%end%> loss <br/>
+
+								Current Streak: <%=max_current_streak%><br/>
+
+								Longest Streak: <%=max_longest_streak%><br/>
+							</div>
+       				<div class = "col-md-8 col-sm-8 centered-text">
+								<h2>Global Rank: 
+       						 <%=max_rank%>
+								</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<!--/row-->
+  </div>
+<!--/container-->
+</div>

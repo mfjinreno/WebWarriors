@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield(:title) %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <meta charset="utf-8">   
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<!--Author: Michael Johnston 
+		Date created: 4/9/16
+-->
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div id="navbar" class="navbar-collapse collapse">
+        <div class="navbar-brand bolded">Web Warriors</div>
+          <ul class="nav navbar-nav">
+          	<li class = "divider-vertical"></li>
+            <li><%=link_to('Home', controller:'/home')%> </li>
+            <li><%=link_to('Arena', controller:'/game') %></li>
+            <li><%=link_to('Leaderboards', controller:'/high_scores' )%></li>
+            <li><%=link_to('Bug Builder', controller: '/creator')%></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+          	<% if user_signed_in? %>
+          	<li><%= link_to('Profile', controller:'/profile')%><li>
+            <li class="active"><%=link_to('Logout', destroy_user_session_path, :method => :delete) %></li>
+            <%else%>
+            <li class="active"><%=link_to('Login', new_user_session_path)%></li>
+            <%end%>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  <div class="body-content">
+    <%= yield %>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!--Author: Michael Johnston 
+                Date created: 4/10/16
+    Modified by: Alex Kaps
+                Date: 4/17/16,4/19/16
+                Added erb code to list @sorted_bug stats
+    Modified by: Yuze Chen
+                Date: 4/21/16,4/24/16
+                Join the Bug and BugStat tables
+                Retrieve data from db by rank order
+-->
+<div class = "jumbotron high-scores-jumbotron">
+	<div class = "container">
+		<h1 class = "centered-text">Web Warrior Leaderboards</h1>
+	</div>
+</div>
+<hr class = "green">
+
+<div class = "container">
+
+<br/>
+
+	<!--Wins leaderboard-->
+	<div class = "col-lg-12 col-md-12 col-sm-12">
+		<div class="panel panel-default">
+		  <!-- panel contents -->
+		  <div class="panel-heading leader"><h3 class ="leaderboard-header">Top 10 Bugs </h3></div>
+    
+
+      <% @user_stats = BugStat.joins("JOIN bugs ON bugs.id=bug_stats.bug_id") %>
+        <% @user = User.all %>
+
+		  <!-- Table -->
+		  <table class="table">
+		   <tr>
+		   	<th>Rank</th>
+		   	<th>Bug</th>
+        <th>User</th>
+        <th>Wins</th>
+        <th>Losses</th>
+        <th>Current Streak</th>
+        <th>Longest Streak</th>
+       </tr>
+
+       <%count = 0%>
+
+        <%@user_stats.where('rank is not null').order(rank: :asc).each do |bugstat|%>
+            <%if count <10%>
+            <tr>
+              <td><%=bugstat.rank%></td>
+              <td><%=bugstat.bug.bug_name%></td>
+              <td><%=(@user.find_by email: bugstat.bug.email).username%></td>
+              <td><%=bugstat.wins%></td>
+              <td><%=bugstat.losses%></td>
+              <td><%=bugstat.current_streak%></td>
+              <td><%=bugstat.longest_streak%></td>
+            </tr>
+            <%count+=1%>
+            <%end%>
+        <%end%>
+
+        <%@user_stats.where('rank is null').each do |bugstat|%>
+         <%if count <10%>
+            <tr>
+              <td><%=bugstat.rank%></td>
+              <td><%=bugstat.bug.bug_name%></td>
+              <td><%=(@user.find_by email: bugstat.bug.email).username%></td>
+              <td><%=bugstat.wins%></td>
+              <td><%=bugstat.losses%></td>
+              <td><%=bugstat.current_streak%></td>
+              <td><%=bugstat.longest_streak%></td>
+            </tr>
+            <%end%>
+        <%end%>
+
+          <%if false %>
+          <%@user_stats.each do |bugstat|%>
+              <tr>
+                <td><%=bugstat.bug_stat.rank%></td>
+                <td><%=bugstat.bug_name%></td>
+                <td><%=(@user.find_by email: bugstat.email).username%></td>
+                <td><%=bugstat.bug_stat.wins%></td>
+                <td><%=bugstat.bug_stat.losses%></td>
+                <td><%=bugstat.bug_stat.current_streak%></td>
+                <td><%=bugstat.bug_stat.longest_streak%></td>
+              </tr>
+          <%end%>
+            <% end %>
+
+
+
+		  </table>
+		</div>
+	</div>
+	<!--Wins leaderboard-->
+
+</div>

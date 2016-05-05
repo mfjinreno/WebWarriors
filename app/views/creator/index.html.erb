@@ -1,0 +1,243 @@
+<!--Author: Michael Johnston 
+            Date created: 4/11/16
+    Modified: Alex Kaps
+    Date modified: 4/12/16
+        Added textarea so user can edit bugs code
+    Modified: Yuze Chen
+    Date modified: 4/13/2016
+        Added "Show instruction" button
+        Added jQuery function to show content when user clicked the button
+    Date modified: 4/14/2016
+        Added content to instruction part.
+-->
+<div class = "jumbotron bug-creator-jumbotron">
+  <div class = "container">
+    <h1>Build, code, <em>battle.</em></h1>
+    <p>Create a unique bug, code its movements, and watch it fight.</p>
+  </div>
+</div>
+<hr class = "green">
+<div class = "container">
+  <div class = "panel panel-default">
+    <div class = "panel-body">
+      <!--big-container houses img-->
+      <div id  = "RGB" class = "col-xs-2 bug-container" data-bind="style: { backgroundColor: getRGBColor }">
+        <div class="image-container head" data-bind="style: { backgroundImage: getHeadImage() }"></div>
+        <div class="image-container body" data-bind="style: { backgroundImage: getBodyImage() }"></div>
+      </div>
+      <!--/bug-container-->
+      <!--slider-container options-->
+      <div class = "col-xs-8 slider-container">
+          <div class = "col-xs-6">
+              <p class = "bug-create-input-title">Bug Name:</p>
+            <textarea class="form-text" type="text" data-bind="textInput: bugsName"></textarea>
+            <br />
+            <br />
+            <p>
+            <b>R</b> 
+                    <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255"
+                           data-slider-step="1" data-slider-value="128" data-slider-id="RC" id="R"
+                           data-slider-tooltip="hide" data-slider-handle="round" data-bind="value: red" />
+            </p>
+            <p>
+            <b>G</b> 
+                   <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255"
+                          data-slider-step="1" data-slider-value="128" data-slider-id="GC" id="G"
+                          data-slider-tooltip="hide" data-slider-handle="round" data-bind="value: green" />
+            </p>
+            <p>
+            <b>B</b> 
+                    <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255"
+                           data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="B"
+                           data-slider-tooltip="hide" data-slider-handle="round" data-bind="value: blue" />
+            </p>
+          </div>
+          <div class = "col-xs-6">
+            <div class = "row">
+              <p class = "bug-create-input-title">Head Type</p>
+              <select data-bind="options: headImages,
+                                 value: selectedHead,
+                                 optionsText: getHeadIndex">
+              </select>
+              <br/>
+            </div>
+            <div class = "row">
+              <p class = "bug-create-input-title">Body Type</p>
+              <select data-bind="options: bodyImages,
+                                 value: selectedBody,
+                                 optionsText: getBodyIndex">
+              </select>
+              <br/>
+            </div>
+            <br/>
+          </div>
+          <br/>
+          <br/>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <p class = "bug-create-input-title">Bug Code:</p>
+          <textarea class="code-text-box" data-bind="textInput: bugCode"></textarea>
+        </div>
+      </div>
+      <div class="row" data-bind="visible: !!isValidBugCode()">
+        <div class="col-xs-12">
+          <div data-bind="text: isValidBugCode"></div>
+        </div>
+      </div>
+      <div class = "row padded-top">
+        <button class="btn btn-primary btn-lg" role="button" data-bind="click: submit, enable: !isValidBugCode()">Create!</button>
+        <button class="btn btn-primary btn-lg" type="button" id="instructionButton">Show instruction</button>
+      </div>
+      <div id="instructionDiv" style="display:none;" >
+        <h1>Bugs Language Instruction</h1>
+        <h2>Overview of Bugs Language</h2>
+        <ul>
+          <li>The behavior of each species is determined by a
+            program in the language BL</li>
+          <li>Each statement ends with a ";"</li>
+          <li>Primitive instructions:
+            <ul>
+              <li>moveForward</li>
+              <li>moveLeft</li>
+              <li>moveRight</li>
+              <li>moveBackward</li>
+              <li>infect</li>
+            </ul>
+          </li>
+          <li>Control structures:
+            <ul>
+              <li>if</li>
+              <li>elsif</li>
+              <li>else</li>
+            </ul>
+          </li>
+          <li>Conditions - test whether “next” cell is:
+            <ul>
+              <li>isEmpty</li>
+              <li>isEnemy</li>
+              <li>isFriend</li>
+              <li>isWall</li>
+            </ul>
+          </li>
+        </ul>
+        <h2>Code Example 1</h2>
+        <xmp>
+          moveForward;
+          if(isEnemy){
+          infect;
+          }elsif(isWall){
+          moveLeft;
+          }else{
+          moveBackward;
+          }
+        </xmp>
+        <h2>Code Example 2</h2>
+        <xmp>
+          if (isEnemy){
+          infect;
+          }elsif(isFriend){
+          moveRight;
+          }elsif(isWall){
+          moveRight;
+          }else{
+          moveForward;}
+        </xmp>
+      </div>
+    </div>
+  </div>
+</div>
+<%= form_tag({:controller => "creator", :action => "new"}, :method => "post", :id => "bugForm") do %>
+    <input name="bugsName" data-bind="value: bugsName" hidden>
+    <input name="headId" data-bind="value: selectedHead().id" hidden>
+    <input name="bodyId" data-bind="value: selectedBody().id" hidden>
+    <input name="rgbColor" data-bind="value: getRGBColor" hidden>
+    <input name="bugCode" data-bind="value: bugCode" hidden>
+<% end %>
+
+<script type="text/javascript">
+
+
+  var submitBugVM = function(bugs){
+    var self = this;
+    self.bugsName = ko.observable('');
+    self.headImages = bugs.filter(function(el){
+      return el.body_part == "head";
+    });
+
+    self.getHeadIndex = function(data){
+      return self.headImages.findIndex(function(el){
+        return el.id == data.id;
+      }) + 1;
+    };
+
+    self.bodyImages = bugs.filter(function(el){
+      return el.body_part === "body";
+    });
+
+    self.getBodyIndex = function(data){
+      return self.bodyImages.findIndex(function(el){
+        return el.id == data.id;
+      }) + 1;
+    };
+
+    self.selectedHead = ko.observable(self.headImages[0]);
+    self.selectedBody = ko.observable(self.bodyImages[0]);
+
+    self.getHeadImage = function() {
+      return "url(\"" + encodeURI(self.selectedHead().image) + "\")";
+    };
+
+    self.getBodyImage = function(){
+      return "url(\"" + encodeURI(self.selectedBody().image) + "\")";
+    };
+
+    self.red = ko.observable(128);
+    self.green = ko.observable(128);
+    self.blue = ko.observable(128);
+
+    self.getRGBColor = ko.computed(function(){
+      return 'rgb(' + self.red() + ',' + self.green() + ',' + self.blue() + ")";
+    });
+
+    self.submit = function(){
+      $('#bugForm').submit();
+    };
+
+    self.bugCode = ko.observable('');
+
+    self.isValidBugCode = ko.computed(function(){
+      var bugCode = new BugModel("red", BugsMoves.Up, { code: self.bugCode() });
+      return bugCode.isInvalid;
+    });
+  };
+
+  $(document).ready(function(){
+    var bugImages = <%= raw @bugImages.to_json %>;
+    ko.applyBindings(new submitBugVM(bugImages));
+
+    $('#instructionButton').click(function() {
+      $('#instructionDiv').toggle('slow', function() {
+        // Animation complete.
+      });
+      $(this).text(function(i, text){
+        return text === "Hide instruction" ? "Show instruction" : "Hide instruction";
+      })
+    });
+
+    var RGBChange = function() {
+      $('#RGB').css('background', 'rgb('+r.getValue()+','+g.getValue()+','+b.getValue()+')')
+    };
+
+    var r = $('#R').slider()
+        .on('slide', RGBChange)
+        .data('slider');
+    var g = $('#G').slider()
+        .on('slide', RGBChange)
+        .data('slider');
+    var b = $('#B').slider()
+        .on('slide', RGBChange)
+        .data('slider');
+  });
+
+</script>

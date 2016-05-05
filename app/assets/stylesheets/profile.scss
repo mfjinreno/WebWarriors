@@ -1,0 +1,148 @@
+/*
+Author: Michael Johnston
+Date-Created: 4/9/16
+*/
+
+.battle-btn{
+    float:right;
+    margin-bottom:5px !important;
+    display:block !important;
+}
+.panel-grey .panel-body {
+  border-radius: 4px;
+  background-color: #eee;
+  color:#333;
+  border-color: #ddd;
+}
+
+.table {
+    display: table !important;   /* Allow the centering to work */
+    margin: 0 auto !important;
+    max-width: 100px !important;
+}
+
+ul#horizontal-list {
+    list-style: none !important;
+    width:100px;
+    height:100px;
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    overflow: hidden;
+}
+    ul#horizontal-list li {
+        display: inline !important;
+    }
+
+li.list-group-item{
+  border-radius: 4px;
+  background-color: #eee;
+  color:#333;
+  border-color: #ddd;
+}
+
+a.btn.btn-primary.btn-lg, a.btn.btn-primary.btn-sm{
+background-color:#03A678;
+border-color: #3FC380;
+}
+a.btn.btn-primary.btn-lg:hover, a.btn.btn-primary.btn-sm:hover{
+background-color:#00B16A;
+}
+
+.centered-text{
+    text-align: center;
+}
+
+.disp{
+    display:inline;
+    list-style:none;
+}
+
+hr.green{
+    background-color:#03A678;
+    border-color: #03A678;
+    color:#03A678;
+    margin-top:0px;
+}
+.info-container{
+    margin-top: -19%;
+}
+
+.list-group{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.list-group-item-text{
+    margin:0 !important;
+    padding:0 !important;
+}
+
+.profile-container{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.profile-img {
+    padding-bottom: 38px;
+}
+
+.profile-img > img.img-circle {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #03A678;
+}
+
+.profile-img a:hover{
+    text-decoration: none;
+}
+
+.profile-info{
+  padding:40px;
+}
+
+.profile-name{
+    text-align: center;
+}
+.profile-jumbotron{
+    margin-bottom:0px !important; 
+}
+
+.right-fix{
+    right:0px;
+}
+
+/**
+ * Ranking component
+ */
+.rank-label-container {
+    margin-top: -19px;
+    /* z-index: 1000; */
+    text-align: center;
+}
+
+.label.label-default.rank-label {
+    background-color: #03A678;
+    padding: 5px 10px 5px 10px;
+    border-radius: 27px;
+}
+
+.label.label-default.rank-label:hover {
+background-color:#00B16A;
+}
+
+li.round-image {
+    background-color: white;
+    border: 1px solid #d9d9d9;
+
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    img { 
+    width: 100%;
+    height:100%;
+    border-radius: 50px;
+    -moz-border-radius: 50px;
+    -webkit-border-radius: 50px;
+    }
+}

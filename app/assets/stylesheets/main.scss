@@ -1,0 +1,15 @@
+//Author: Michael Johnston
+
+.body-content{
+  position:relative;
+  padding-top: 50px;
+  overflow: hidden;
+}
+
+.btn.btn-primary.btn-lg, .btn.btn-primary.btn-sm{
+background-color:#03A678;
+border-color: #3FC380;
+}
+.btn.btn-primary.btn-lg:hover, .btn.btn-primary.btn-sm:hover{
+background-color:#00B16A;
+}

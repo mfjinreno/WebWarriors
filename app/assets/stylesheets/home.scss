@@ -1,0 +1,17 @@
+/*
+Author: Michael Johnston
+Date-Created: 4/9/16
+*/
+$theme: #03A678;
+.padded{
+	margin-top:6%;
+}
+hr.green{
+    background-color:$theme;
+    border-color:$theme;
+    color:$theme;
+    margin-top:0px;
+}
+.home-jumbotron{
+	margin:0 !important;
+}

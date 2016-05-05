@@ -1,0 +1,76 @@
+/*
+Author: Michael Johnston
+Date-Created: 4/11/16
+*/
+
+.bug-container{
+  text-align: center;
+  height: 300px;
+  .image-container{
+    height: 150px;
+    width: 100%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+}
+
+.bug-creator-jumbotron{
+	margin-bottom:0 !important;
+}
+.bug-create-input-title{
+	margin:0 !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	font-weight: 200 !important;
+	color:#333 !important;
+}
+hr.green{
+    background-color:#03A678;
+    border-color: #03A678;
+    color:#03A678;
+    margin-top:0px;
+}
+.form-text:focus{
+	border-color:#03A678 !important; 
+	box-shadow: inset 0 1px 1px #03A678, 0 0 3px #03A678 !important; 
+
+}
+.padded-top{
+	margin-top: 2%;
+}
+.code-text-box{
+  height: 300px;
+  width: 100%;
+  resize: none;
+}
+
+/*Slider CSS*/
+
+#RGB {
+	background: rgb(128, 128, 128);
+}
+#RC .slider-selection {
+	background: #E26A6A;
+}
+#RC .slider-handle {
+	background: #D91E18;
+}
+#GC .slider-selection {
+	background: #68C3A3;
+}
+#GC .slider-handle {
+	background: #03A678;
+}
+#BC .slider-selection {
+	background: #8283FF;
+}
+#BC .slider-handle {
+	border-bottom-color: #4183D7;
+}
+#R, #G, #B {
+	width: 300px;
+}
+
+#bodySlider .slider-handle, #headSlider .slider-handle{
+	background: #03A678;
+}

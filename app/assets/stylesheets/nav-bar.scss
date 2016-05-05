@@ -1,0 +1,39 @@
+/*
+Author: Michael Johnston
+Date-Created: 4/9/16
+*/
+.bolded {
+  color:#03A678 !important;
+}
+
+.navbar{
+  margin-bottom: 0 !important;
+}
+.grey{
+  color:#777;
+}
+.navbar .divider-vertical {
+    height: 40px;
+    margin: 1% 9px;
+    border-right: 1px solid #6C7A89;
+    border-left: 1px solid #f2f2f2;
+}
+
+.navbar-inverse .divider-vertical {
+    border-right-color: #222222;
+    border-left-color: #111111;
+}
+
+@media (max-width: 767px) {
+    .navbar-collapse .nav > .divider-vertical {
+        display: none;
+     }
+}
+
+.navbar-default .navbar-nav > li > a:hover{
+  color:#03A678 !important;
+}
+.navbar-default .navbar-nav > .active > a:hover{
+  background-color:#03A678 !important;
+  color:white !important;
+}

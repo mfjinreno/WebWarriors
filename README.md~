@@ -1,0 +1,23 @@
+# Project 6
+## Ruby on Rails Project
+
+## Roles
+* Overall Project Manager: Lucas Rodriguez
+* Coding Manager: 
+* Testing Manager:
+* Documentation: Nathan Borak
+
+## Contributions
+Please list who did what for each part of the project.
+Also list if people worked together (pair programmed) on a particular section.
+
+## Nathan Borak
+- JS testing, profile page logic, profile pictures
+
+### Lucas Rodriguez
+
+1. Implement all of the JavaScript functions for the Bug game
+2. Implement the HTML of the Arena page (did not style any of it)
+3. Implement running the Bug Game on the arena page
+4. Implement the Bug Images on the sever
+5. Implement a majority of the game controller actions

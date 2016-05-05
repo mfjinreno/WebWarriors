@@ -1,0 +1,94 @@
+/**
+ * Created by lucas on 4/9/16.
+ */
+var GameController = function(bugs, size, bugsCount){
+    var self = this;
+    if(!Array.isArray(bugs)) {
+        console.error("Bugs is not an array");
+        return undefined;
+    }
+    if(bugs.length != 2){
+        console.error("Bugs array is not correct length");
+        return undefined;
+    }
+    if(bugsCount > size * size) {
+        console.error("Bugs Count is too high");
+        return undefined;
+    }
+
+    self.bugsCount = bugsCount;
+    self.board = new BoardModel(size);
+    self.getBoard = function(){
+        return self.board.board;
+    };
+
+    self.runRound = function(){
+      self.board.getBugs().forEach(function(el){
+          var neighbor = self.board.getNeighbor(el);
+          var move = el.makeMove(neighbor);
+          self.board.makeMove(el, move);
+      });
+    };
+
+    self.gameOver = function(){
+	    var bugs = self.board.getBugs();
+	    var firstTeam = bugs[0].team;
+	    return bugs.some(function(el){
+	        return el != firstTeam;
+	    });
+    };
+
+	self.getWinner = function(){
+		var bugIdCount = {};
+		self.board.getBugs().forEach(function(el){
+			if(!bugIdCount.hasOwnProperty(el.bugId)){
+				bugIdCount[el.bugId] = 0;
+			}
+			bugIdCount[el.bugId] = bugIdCount[el.bugId] + 1;
+		});
+		if(bugIdCount.length != 2) { console.error("Issue aggregating scores"); return; }		
+		return Object.keys(bugIdCount).reduce(function(a, b) {
+			return bugIdCount[a] > bugIdCount[b] ? a : b;
+		});
+	};
+
+    self.getBugPosition = function(){
+        var bugPos = [];
+        self.board.getBugs().forEach(function(el){
+           var pos = self.board.getPosition(el);
+            var row = pos[0];
+            var column = pos[1];
+            bugPos.push({bug: el, row: row, column: column});
+        });
+    };
+
+    // Initializes all the bugs positions
+    var positions = [];
+    var squareSize = size * size;
+    while(positions.length < self.bugsCount * 2){
+        var pos = Math.floor(Math.random() * squareSize);
+        if(!positions.some(function(el) { return el == pos;})){
+            positions.push(pos);
+        }
+    }
+
+    self._getRandomDirection = function(){
+        var num = Math.floor(Math.random() * 4);
+        if(num < 4) { return BugsMoves.Left; } else
+        if(num < 3) { return BugsMoves.Right; } else
+        if(num < 2) { return BugsMoves.Down; } else
+        { return BugsMoves.Up; }
+    };
+
+    bugs.forEach(function(el, index){
+        var team = (index == 0 ? BugsTeam.Red : BugsTeam.Blue);
+        for(var i = 0; i < self.bugsCount; i ++){
+            var direction = self._getRandomDirection();
+            var bugCode = new BugModel(team, direction, el);
+            var pos = positions.pop();
+            var row = pos % size;
+            var column = Math.floor(pos / size);
+            self.board.setPosition(bugCode, row, column);
+        }
+    });
+};

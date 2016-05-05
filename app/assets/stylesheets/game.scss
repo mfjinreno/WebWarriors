@@ -1,0 +1,156 @@
+// Author: Lucas Rodriguez
+// Date Created: 4/12/16
+// All the scss for the game page
+// Edited: Michael Johnston
+// Styled list of bugs for user/opponents
+// Styled game table
+
+.game-container{
+
+  table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table, tr, td{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+  }
+
+  tr{
+    width: 100%;
+    height: 60px;
+    overflow: hidden;
+
+  }
+  td{
+    width: 10%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .bug-image-container{
+    height: 10% !important;
+    width: 10%;
+    overflow:hidden;
+    .rotate-image{
+      height:100%;
+      width:100%;
+      .image-container{
+        height: 50%;
+        width: 100%;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        overflow:hidden;
+      }
+    }
+  }
+}
+
+.row.padded-top{
+  margin-top: 5% !important;
+}
+
+.col-centered{
+    float: none !important;
+    margin: 0 auto !important;
+}
+
+.game-padded{
+  margin:10px !important;
+  position:relative;
+
+
+}
+.game-padded.right{
+  float:right !important;
+}
+
+hr.green{
+    background-color:#03A678;
+    border-color: #03A678;
+    color:#03A678;
+    margin-top:0px;
+}
+
+li.green{
+  background-color: #03A678;
+  color: white;
+}
+
+.game-jumbotron{
+  margin:0 !important;
+}
+
+.select-bugs-container{
+  li:hover{
+    cursor: pointer;
+  }
+}
+
+#test  {
+  li {
+     list-style: none;
+  }
+  ul {
+    padding:0 !important;
+  }
+ 
+}
+
+.panel-tabs {
+    position: relative;
+    bottom: 30px;
+    clear:both;
+    border-bottom: 1px solid transparent;
+}
+
+.panel-tabs > li {
+    float: left;
+    margin-bottom: -1px;
+}
+
+.panel-tabs > li > a {
+    margin-right: 2px;
+    margin-top: 4px;
+    line-height: .85;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    color: #FFFFFF;
+}
+
+.panel-tabs > li > a:hover {
+    border-color: transparent;
+    color: #FFFFFF;
+    background-color: transparent;
+}
+
+.panel-primary>.panel-heading {
+    color: #FFFFFF;
+    background-color: #03A678 !important;
+    border-color: #03A678 !important;
+}
+
+.panel-primary {
+    border-color: #03A678 !important;
+}
+
+.panel-tabs > li.active > a,
+.panel-tabs > li.active > a:hover,
+.panel-tabs > li.active > a:focus {
+    color: #FFFFFF;
+    cursor: default;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: rgba(255,255,255, .23);
+    border-bottom-color: transparent;
+}
+
+.tab-pane{
+    height:300px;
+    overflow-y:scroll;
+}
