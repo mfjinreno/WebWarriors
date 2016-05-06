@@ -44,7 +44,7 @@
        <%count = 0%>
 
         <%@user_stats.where('rank is not null').order(rank: :asc).each do |bugstat|%>
-            <%if count <10%>
+            <%if count <10 && bugstat.wins + bugstat.losses >=20%>
             <tr>
               <td><%=bugstat.rank%></td>
               <td><%=bugstat.bug.bug_name%></td>
@@ -61,7 +61,7 @@
         <%@user_stats.where('rank is null').each do |bugstat|%>
          <%if count <10%>
             <tr>
-              <td><%=bugstat.rank%></td>
+              <td>N/A</td>
               <td><%=bugstat.bug.bug_name%></td>
               <td><%=(@user.find_by email: bugstat.bug.email).username%></td>
               <td><%=bugstat.wins%></td>
@@ -71,20 +71,6 @@
             </tr>
             <%end%>
         <%end%>
-
-          <%if false %>
-          <%@user_stats.each do |bugstat|%>
-              <tr>
-                <td><%=bugstat.bug_stat.rank%></td>
-                <td><%=bugstat.bug_name%></td>
-                <td><%=(@user.find_by email: bugstat.email).username%></td>
-                <td><%=bugstat.bug_stat.wins%></td>
-                <td><%=bugstat.bug_stat.losses%></td>
-                <td><%=bugstat.bug_stat.current_streak%></td>
-                <td><%=bugstat.bug_stat.longest_streak%></td>
-              </tr>
-          <%end%>
-            <% end %>
 
 
 

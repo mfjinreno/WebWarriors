@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160425010111) do
+ActiveRecord::Schema.define(version: 20160505232740) do
 
   create_table "bug_images", force: :cascade do |t|
     t.string   "body_part"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160425010111) do
     t.integer "current_streak", default: 0
     t.integer "longest_streak", default: 0
     t.integer "bug_id"
+    t.integer "elo_score",      default: 1200
   end
 
   create_table "bugs", force: :cascade do |t|

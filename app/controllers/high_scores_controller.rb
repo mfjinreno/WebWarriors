@@ -13,8 +13,8 @@ class HighScoresController < ApplicationController
     def sorted_bug_stats
         stat_hash = {}
         for stat in @bug_stats
-          if (stat.wins+stat.losses)!=0
-            stat_hash[stat.bug_id] = stat.wins/(stat.wins+stat.losses)
+          if (stat.wins+stat.losses)>=20
+            stat_hash[stat.bug_id] = stat.elo_score
           end
         end
 

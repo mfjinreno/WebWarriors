@@ -52,20 +52,9 @@ class GameController < ApplicationController
     @bug_stats = BugStat.all
     stat_hash = {}
 
-    convergence_constant = 5
-    total_wins = 0
-    total_losses = 0
     @bug_stats.each do |stat|
-      total_wins = total_wins +stat.wins
-      total_losses = total_losses + stat.losses
-    end
-    winning_percent = total_wins.to_f/(total_wins.to_f+total_losses.to_f)
-
-    @bug_stats.each do |stat|
-      if (stat.wins+stat.losses)!=0
-        stat_hash[stat.bug_id] = (stat.wins+convergence_constant*winning_percent).to_f/(stat.wins.to_f+stat.losses.to_f+convergence_constant)
-      else
-        stat_hash[stat.bug_id] = 0.to_f
+      if (stat.wins+stat.losses)>=20
+        stat_hash[stat.bug_id] = stat.elo_score
       end
     end
 
@@ -84,6 +73,14 @@ class GameController < ApplicationController
   def postwin
     @winnerBug = BugStat.find_by(bug_id: params[:winnerId])
     @loserBug = BugStat.find_by(bug_id: params[:loserId])
+
+
+    con = 50.to_f
+    expected_winner = 1.to_f / (1.to_f + (10.to_f**((@loserBug.elo_score.to_f-@winnerBug.elo_score.to_f)/400.to_f)))
+    expected_loser = 1.to_f - expected_winner.to_f
+    @winnerBug.elo_score += (50*(1-expected_winner.to_i))
+    @loserBug.elo_score = (@loserBug.elo_score.to_f + (50.to_f*(0.to_f-expected_loser.to_f))).to_i
+
     @winnerBug.wins+=1
     @loserBug.losses+=1
     @winnerBug.current_streak+=1

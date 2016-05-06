@@ -100,8 +100,16 @@
        						 		<%end%>
        						 <%end%>
 
+       						 <%win_total = 0%>
+       						 <%loss_total = 0%>
+       						 <%@user_stats.each do |bugstat| %>
+       						 	<%if (@user.find_by email: bugstat.bug.email).username == current_user.username%>
+       						 		<%win_total = win_total + bugstat.wins%>
+       						 		<%loss_total = loss_total + bugstat.losses%>
+       						 	<%end%>
+       						 <%end%>
        				<div class ="col-md-4 col-sm-4">
-								Online Record: <%@wins = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:wins)%> <% if @wins.is_a? Integer %> <%=@wins%> <%else%> 0 <%end%> win / <%@losses = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:losses)%> <% if @losses.is_a? Integer %> <%=@losses%> <%else%> 0 <%end%> loss <br/>
+								Online Record:<%=win_total%> win / <%=loss_total%> loss <br/>
 
 								Current Streak: <%=max_current_streak%><br/>
 
@@ -109,9 +117,17 @@
 							</div>
        				<div class = "col-md-8 col-sm-8 centered-text">
 								<h2>Global Rank: 
-       						 <%=max_rank%>
+       						 <%if max_rank == 10000%>
+       						 <%= "Unranked" %>
+       						 <%end%>
 								</h2>
 							</div>
+
+
+<%if false%>
+ <%@wins = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:wins)%> <% if @wins.is_a? Integer %> <%=@wins%> <%else%> 0 <%end%> win / <%@losses = User.joins('JOIN bugs ON bugs.email = users.email').joins('JOIN bug_stats ON bug_stats.bug_id = bugs.id').where(id: current_user.id).sum(:losses)%> <% if @losses.is_a? Integer %> <%=@losses%> <%else%> 0 <%end%>
+<%end%>
+
 						</div>
 					</div>
 				</div>
