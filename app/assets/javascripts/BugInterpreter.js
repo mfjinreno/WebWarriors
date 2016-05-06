@@ -4,6 +4,8 @@
  * that will return what move the bug will make.
  *
  * All functions have been written by Lucas Rodriguez
+ * Edited by Michael Johnston 5/6/16
+ * Added turnRight turnLeft to interp switch.
  */
 
 var BugInterpreter = function(code){
@@ -157,6 +159,28 @@ var BugInterpreter = function(code){
                 } else{
                     return function() {
                         return 'There was an error parsing ' + token + ' in ' + BugTokens.MoveBackward +
+                            " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
+                    };
+                }
+                break;
+            case BugTokens.TurnRight:
+                var token = tokens.shift();
+                if (token == BugTokens.EndStatement){
+                    return function() {return BugTokens.TurnRight}
+                } else{
+                    return function() {
+                        return 'There was an error parsing ' + token + ' in ' + BugTokens.TurnRight +
+                            " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
+                    };
+                }
+                break;
+            case BugTokens.TurnLeft:
+                var token = tokens.shift();
+                if (token == BugTokens.EndStatement){
+                    return function() {return BugTokens.TurnLeft}
+                } else{
+                    return function() {
+                        return 'There was an error parsing ' + token + ' in ' + BugTokens.TurnLeft +
                             " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
                     };
                 }

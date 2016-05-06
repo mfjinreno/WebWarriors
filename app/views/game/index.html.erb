@@ -6,6 +6,9 @@
      Edited: Michael Johnston
      Styled list of bugs for user/opponents
      Styled game table
+
+     5/6/16
+     Added switch to accept the new directions
 -->
 
 <div data-bind="ifnot: gameView().isRunning" class="select-bugs-container row">
@@ -340,6 +343,16 @@
           return 'rotate(180deg)';
           break;
         case BugsMoves.Up:
+        case BugsMoves.SLeft:
+          return 'rotate(270deg)';
+          break;
+        case BugsMoves.SRight:
+          return 'rotate(90deg)';
+          break;
+        case BugsMoves.SDown:
+          return 'rotate(180deg)';
+          break;
+        case BugsMoves.SUp:
         default:
           return 'rotate(0deg)';
           break;

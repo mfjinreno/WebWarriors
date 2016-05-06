@@ -3,6 +3,13 @@
  * A Mode representing a Bug
  *
  * Everything was written by Lucas Rodriguez
+ * Edited by Michael Johnston 5/6/16
+ * -Added cases to getGlobalMove to accept new moves turnLeft/turnRight
+ * -Added to getGlobalMove's MoveForward statement to convert
+ * SDown -> Down etc... as S(Direction) was keeping bugs in one position
+ * and original just passed whatever current global instruction was
+ * loaded before.
+ *
  */
 
 // A function to generate the id of each bug
@@ -31,7 +38,22 @@ var BugModel = function(team, direction, bug){
         // A switch case for all of the possible moves of the bug
         switch(move){
             case BugTokens.MoveForward:
-                return self.direction;
+                switch(self.direction){
+                 case BugsMoves.SDown:
+                        return BugsMoves.Down;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.Up;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.Right;
+                        break;
+                    case BugsMoves.SLeft:
+                        return BugsMoves.Left;
+                        break;
+                    default:
+                        return self.direction;
+                }
                 break;
             case BugTokens.MoveRight:
                 switch(self.direction){
@@ -45,6 +67,18 @@ var BugModel = function(team, direction, bug){
                         return BugsMoves.Down;
                         break;
                     case BugsMoves.Left:
+                        return BugsMoves.Up;
+                        break;
+                    case BugsMoves.SDown:
+                        return BugsMoves.Left;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.Right;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.Down;
+                        break;
+                    case BugsMoves.SLeft:
                         return BugsMoves.Up;
                         break;
                 }
@@ -63,6 +97,18 @@ var BugModel = function(team, direction, bug){
                     case BugsMoves.Left:
                         return BugsMoves.Right;
                         break;
+                    case BugsMoves.SDown:
+                        return BugsMoves.Up;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.Down;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.Left;
+                        break;
+                    case BugsMoves.SLeft:
+                        return BugsMoves.Right;
+                        break;
                 }
                 break;
             case BugTokens.MoveLeft:
@@ -78,6 +124,74 @@ var BugModel = function(team, direction, bug){
                         break;
                     case BugsMoves.Left:
                         return BugsMoves.Down;
+                        break;
+                    case BugsMoves.SDown:
+                        return BugsMoves.Right;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.Left;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.Up;
+                        break;
+                    case BugsMoves.SLeft:
+                        return BugsMoves.Down;
+                        break;
+                }
+                break;
+            case BugTokens.TurnRight:
+                switch(self.direction){
+                     case BugsMoves.Down:
+                        return BugsMoves.SLeft;
+                        break;
+                    case BugsMoves.Up:
+                        return BugsMoves.SRight;
+                        break;
+                    case BugsMoves.Right:
+                        return BugsMoves.SDown;
+                        break;
+                    case BugsMoves.Left:
+                        return BugsMoves.SUp;
+                        break;
+                    case BugsMoves.SDown:
+                        return BugsMoves.SLeft;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.SRight;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.SDown;
+                        break;
+                    case BugsMoves.SLeft:
+                        return BugsMoves.SUp;
+                        break;
+                }
+                break;
+            case BugTokens.TurnLeft:
+                switch(self.direction){
+                    case BugsMoves.Down:
+                        return BugsMoves.SRight;
+                        break;
+                    case BugsMoves.Up:
+                        return BugsMoves.SLeft;
+                        break;
+                    case BugsMoves.Right:
+                        return BugsMoves.SUp;
+                        break;
+                    case BugsMoves.Left:
+                        return BugsMoves.SDown;
+                        break;
+                    case BugsMoves.SDown:
+                        return BugsMoves.SRight;
+                        break;
+                    case BugsMoves.SUp:
+                        return BugsMoves.SLeft;
+                        break;
+                    case BugsMoves.SRight:
+                        return BugsMoves.SUp;
+                        break;
+                    case BugsMoves.SLeft:
+                        return BugsMoves.SDown;
                         break;
                 }
                 break;

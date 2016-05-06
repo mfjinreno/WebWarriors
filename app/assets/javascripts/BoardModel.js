@@ -2,6 +2,8 @@
  * Created by Lucas Rodriguez on 4/9/16.
  * A model of the board that the bugs play on.
  * Everything was written by Lucas Rodriguez
+ * Edited by Michael Johnston 5/6/16
+ * Added cases to getNeighbor, makeMove, and isMove to accept new sLeft etc..
  */
 var BoardModel = function(size){
     var self = this;
@@ -84,6 +86,54 @@ var BoardModel = function(size){
                     }
                 }
                 break;
+            case BugsMoves.SLeft:
+                if(column == 0) { return NeighborStatus.IsWall; }
+                else {
+                    if(self.board[row][column-1]) {
+                        return self.board[row][column-1].team == bug.team ?
+                            NeighborStatus.IsFriend :
+                            NeighborStatus.IsEnemy;
+                    } else{
+                        return NeighborStatus.IsEmpty;
+                    }
+                }
+                break;
+            case BugsMoves.SRight:
+                if(column == self.size - 1) { return NeighborStatus.IsWall; }
+                else {
+                    if(self.board[row][column+1]) {
+                        return self.board[row][column+1].team == bug.team ?
+                            NeighborStatus.IsFriend :
+                            NeighborStatus.IsEnemy;
+                    } else{
+                        return NeighborStatus.IsEmpty;
+                    }
+                }
+                break;
+            case BugsMoves.SUp:
+                if(row == 0) { return NeighborStatus.IsWall; }
+                else {
+                    if(self.board[row-1][column]) {
+                        return self.board[row-1][column].team == bug.team ?
+                            NeighborStatus.IsFriend :
+                            NeighborStatus.IsEnemy;
+                    } else{
+                        return NeighborStatus.IsEmpty;
+                    }
+                }
+                break;
+            case BugsMoves.SDown:
+                if(row == self.size - 1) { return NeighborStatus.IsWall; }
+                else {
+                    if(self.board[row+1][column]) {
+                        return self.board[row+1][column].team == bug.team ?
+                            NeighborStatus.IsFriend :
+                            NeighborStatus.IsEnemy;
+                    } else{
+                        return NeighborStatus.IsEmpty;
+                    }
+                }
+                break;
             default:
                 alert("Error processing bug neighbor");
                 break;
@@ -133,6 +183,23 @@ var BoardModel = function(size){
                   self.board[row][column] = bug;
                   bug.direction = move;
                   break;
+              case BugsMoves.SLeft:
+                  self.board[row][column] = bug;
+                  bug.direction = move;
+                  break;
+              case BugsMoves.SRight:
+                  self.board[row][column] = bug;
+                  bug.direction = move;
+                  break;
+              case BugsMoves.SUp:
+                  self.board[row][column] = bug;
+                  bug.direction = move;
+                  break;
+              case BugsMoves.SDown:
+                  self.board[row][column] = bug;
+                  bug.direction = move;
+                  break;
+
               case BugsMoves.Infect:
                   switch(bug.direction){
                       case BugsMoves.Left:
@@ -151,6 +218,26 @@ var BoardModel = function(size){
                           }
                           break;
                       case BugsMoves.Down:
+                          if(self.board[row+1][column]){
+                              self.board[row+1][column] = $.extend(true, {}, bug);
+                          }
+                          break;
+                      case BugsMoves.SLeft:
+                          if(self.board[row][column-1]){
+                              self.board[row][column-1] = $.extend(true, {}, bug);
+                          }
+                          break;
+                      case BugsMoves.SRight:
+                          if(self.board[row][column+1]){
+                              self.board[row][column+1] = $.extend(true, {}, bug);
+                          }
+                          break;
+                      case BugsMoves.SUp:
+                          if(self.board[row-1][column]){
+                              self.board[row-1][column] = $.extend(true, {}, bug);
+                          }
+                          break;
+                      case BugsMoves.SDown:
                           if(self.board[row+1][column]){
                               self.board[row+1][column] = $.extend(true, {}, bug);
                           }
@@ -196,6 +283,18 @@ var BoardModel = function(size){
                 if(self.board[row+1][column]) { return false; }
                 return true;
                 break;
+            case BugsMoves.SLeft:
+                return true;
+                break;
+            case BugsMoves.SRight:
+                return true;
+                break;
+            case BugsMoves.SUp:
+                return true;
+                break;
+            case BugsMoves.SDown:
+                return true;
+                break;
             case BugsMoves.Infect:
                 switch(bug.direction){
                     case BugsMoves.Left:
@@ -222,6 +321,31 @@ var BoardModel = function(size){
                             return self.board[row+1][column] != bug.team;
                         }
                         break;
+                    case BugsMoves.SLeft:
+                        if(column == 0) { return false; }
+                        if(self.board[row][column-1]){
+                            return self.board[row][column-1].team != bug.team;
+                        }
+                        break;
+                    case BugsMoves.SRight:
+                        if(column == self.size - 1) { return false; }
+                        if(self.board[row][column+1]){
+                            return self.board[row][column+1] != bug.team;
+                        }
+                        break;
+                    case BugsMoves.SUp:
+                        if(row == 0) { return false; }
+                        if(self.board[row-1][column]){
+                            return self.board[row-1][column] != bug.team;
+                        }
+                        break;
+                    case BugsMoves.SDown:
+                        if(row == self.size - 1) { return false; }
+                        if(self.board[row+1][column]){
+                            return self.board[row+1][column] != bug.team;
+                        }
+                        break;
+                    
                 }
                 break;
             default:

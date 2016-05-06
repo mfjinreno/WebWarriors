@@ -1,6 +1,8 @@
 /**
  * Created by Lucas Rodriguez on 4/12/16.
  * All the possible tokens of the bugs
+ * Edited by Michael Johnston 5/6/16
+ * Added turnLeft, turnRight tokens
  */
 
 var BugTokens = {
@@ -17,6 +19,8 @@ var BugTokens = {
     MoveLeft: "moveLeft",
     MoveRight: "moveRight",
     MoveBackward: "moveBackward",
+    TurnRight: "turnRight",
+    TurnLeft: "turnLeft",
     Infect: "infect",
 
     EndStatement: ";",
