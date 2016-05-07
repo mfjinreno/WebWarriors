@@ -91,12 +91,6 @@
        						 			<%if bugstat.rank < max_rank%>
        						 				<%max_rank = bugstat.rank%>
        						 			<%end%>
-       						 			<%if bugstat.current_streak > max_current_streak%>
-       						 				<%max_current_streak = bugstat.current_streak%>
-       						 			<%end%>
-       						 			<%if bugstat.longest_streak > max_longest_streak%>
-       						 				<%max_longest_streak = bugstat.longest_streak%>
-       						 			<%end%>
        						 		<%end%>
        						 <%end%>
 
@@ -106,10 +100,16 @@
        						 	<%if (@user.find_by email: bugstat.bug.email).username == current_user.username%>
        						 		<%win_total = win_total + bugstat.wins%>
        						 		<%loss_total = loss_total + bugstat.losses%>
+       						 		<%if bugstat.current_streak > max_current_streak%>
+       						 				<%max_current_streak = bugstat.current_streak%>
+       						 			<%end%>
+       						 			<%if bugstat.longest_streak > max_longest_streak%>
+       						 				<%max_longest_streak = bugstat.longest_streak%>
+       						 			<%end%>
        						 	<%end%>
        						 <%end%>
        				<div class ="col-md-4 col-sm-4">
-								Online Record:<%=win_total%> win / <%=loss_total%> loss <br/>
+								Online Record: <%=win_total%> win / <%=loss_total%> loss <br/>
 
 								Current Streak: <%=max_current_streak%><br/>
 
