@@ -11,6 +11,9 @@ var BugTokens = {
     IsFriend: "isFriend",
     IsWall: "isWall",
 
+    AND: "and",
+    OR: "or",
+
     If: "if",
     ElsIf: "elsif",
     Else: "else",

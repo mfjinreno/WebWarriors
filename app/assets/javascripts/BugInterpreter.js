@@ -6,6 +6,13 @@
  * All functions have been written by Lucas Rodriguez
  * Edited by Michael Johnston 5/6/16
  * Added turnRight turnLeft to interp switch.
+ *
+ * Michael Johnston 5/7/16
+ * -Added to all boolean functions a switch to handle and/or statements
+ * -Added to parenthesis function to check for multiple boolean statements inline
+ *
+ *
+ *
  */
 
 var BugInterpreter = function(code){
@@ -53,24 +60,96 @@ var BugInterpreter = function(code){
             // For boolean tokens returns a function that takes the
             // neighbor as a parameter and returns where statement is true
             case BugTokens.IsEmpty:
-                return function(neighbor){
-                    return neighbor == BugTokens.IsEmpty;
-                    };
+                var peek = tokens[0];
+                switch(peek){
+                    case BugTokens.AND:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isEmpty)&& !!(statement(neighbor)));
+                        };
+                        break;
+                    case BugTokens.OR:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isEmpty)|| !!(statement(neighbor)));
+                        };
+                        break;
+                    default:
+                        return function(neighbor){
+                            return neighbor == BugTokens.IsEmpty;
+                        };
+                } 
                 break;
             case BugTokens.IsEnemy:
-                return function(neighbor){
-                    return neighbor == BugTokens.IsEnemy;
-                };
+                var peek = tokens[0];
+                switch(peek){
+                    case BugTokens.AND:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isEnemy)&& !!(statement(neighbor)));
+                        };
+                        break;
+                    case BugTokens.OR:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isEnemy)|| !!(statement(neighbor)));
+                        };
+                        break;
+                    default:
+                        return function(neighbor){
+                            return neighbor == BugTokens.IsEnemy;
+                        };
+                } 
                 break;
             case BugTokens.IsFriend:
-                return function(neighbor){
-                    return neighbor == BugTokens.IsFriend;
-                };
+                var peek = tokens[0];
+                switch(peek){
+                    case BugTokens.AND:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isFriend)&& !!(statement(neighbor)));
+                        };
+                        break;
+                    case BugTokens.OR:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isFriend)|| !!(statement(neighbor)));
+                        };
+                        break;
+                    default:
+                        return function(neighbor){
+                            return neighbor == BugTokens.IsFriend;
+                        };
+                } 
                 break;
             case BugTokens.IsWall:
-                return function(neighbor){
-                    return neighbor == BugTokens.IsWall;
-                };
+                var peek = tokens[0];
+                switch(peek){
+                    case BugTokens.AND:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isWall)&& !!(statement(neighbor)));
+                        };
+                        break;
+                    case BugTokens.OR:
+                        var dummy = tokens.shift();
+                        var statement = self.generateCall(tokens);
+                        return function(neighbor){
+                            return ((neighbor == BugTokens.isWall)|| !!(statement(neighbor)));
+                        };
+                        break;
+                    default:
+                        return function(neighbor){
+                            return neighbor == BugTokens.IsWall;
+                        };
+                } 
                 break;
 
             // An if boolean condition
@@ -202,7 +281,22 @@ var BugInterpreter = function(code){
                 var boolCall = self.generateCall(tokens);
                 var token = tokens.shift();
                 if(token == BugTokens.EndParenthesis){
-                    return function(neighbor) { return boolCall(neighbor); };
+                    var peek = tokens[0];
+                    switch(peek){
+                        case BugTokens.AND:
+                            var dummy = tokens.shift();
+                            var nextCall = self.generateCall(tokens);
+                            return function(neighbor) { return (boolCall(neighbor) && nextCall(neighbor)); };
+                            break;
+                        case BugTokens.OR:
+                            var dummy = tokens.shift();
+                            var nextCall = self.generateCall(tokens);
+                            return function(neighbor) { return (boolCall(neighbor) || nextCall(neighbor)); };
+                            break;
+                        default:
+                            return function(neighbor) { return boolCall(neighbor); }; 
+                    }
+                    
                 } else{
                     var s = function() {
                         return "There was an error parsing " + token + " in " + BugTokens.StartParenthesis +
