@@ -1,8 +1,16 @@
-/*Author Nathan Borak
+/*Created by Nathan Borak
+-all tests not marked explicitely as Nate's were written by Michael Johnston
 
 Edited by Michael Johnston 5/7/16
 -Added test to check for boolean movement
+
+Edited by Michael Johnston 5/8/16
+-added lots of tests to check for boolean movement.
+
+
 */
+
+//Author Nathan Borak
 QUnit.test( "Moving forward from down", function( assert ) {
 	var board = new BoardModel(2);
 	var newBug = new BugModel(BugsTeam.Red, BugsMoves.Up, { code: "moveForward;"});
@@ -21,6 +29,7 @@ QUnit.test( "Moving forward from down", function( assert ) {
 	assert.ok(flag, "Should return [1, 0]");
 });
 
+//Author Nathan Borak
 QUnit.test( "Moving forward from up", function( assert ) {
 	var board = new BoardModel(2);
 	var newBug = new BugModel(BugsTeam.Red, BugsMoves.Up, { code: "moveForward;"});
@@ -39,6 +48,7 @@ QUnit.test( "Moving forward from up", function( assert ) {
 	assert.ok(flag, "Should return [0, 0]");
 });
 
+//Author Nathan Borak
 QUnit.test( "Moving left from up", function( assert ) {
 	var board = new BoardModel(2);
 	var newBug = new BugModel(BugsTeam.Red, BugsMoves.Up, { code: "moveLeft;"});
@@ -57,6 +67,7 @@ QUnit.test( "Moving left from up", function( assert ) {
 	assert.ok(flag, "Should return [0, 0]");
 });
 
+//Author Nathan Borak
 QUnit.test( "Moving into wall", function( assert ) {
 	var board = new BoardModel(2);
 	var newBug = new BugModel(BugsTeam.Red, BugsMoves.Up, { code: "moveForward;"});
@@ -77,7 +88,9 @@ QUnit.test( "Moving into wall", function( assert ) {
 
 /*
 -------Boolean Movement Tests--------
-written 5/7/16 by Michael Johnston
+Created 5/7/16 by Michael Johnston
+
+
 
 */
 

@@ -3,7 +3,9 @@
  * Parses out BugsCode and returns a function that can be called
  * that will return what move the bug will make.
  *
- * All functions have been written by Lucas Rodriguez
+ * (almost) All functions have been written by Lucas Rodriguez
+ *
+ * ---CHANGELOG---
  * Edited by Michael Johnston 5/6/16
  * Added turnRight turnLeft to interp switch.
  *
@@ -11,8 +13,10 @@
  * -Added to all boolean functions a switch to handle and/or statements
  * -Added to parenthesis function to check for multiple boolean statements inline
  *
- *
- *
+ * Michael Johnston 5/8/16
+ * -Removed from boolean function swtich handling and-or
+ * -completely re-wrote parenthesis function to handle boolean statements, deleting 
+ * all of the work I did yesterday
  */
 
 var BugInterpreter = function(code){
@@ -206,11 +210,14 @@ var BugInterpreter = function(code){
                 break;
 
             // If a parenthesis is found iterates until the end of it and returns a function of the boolean
+            //re-written by Michael Johnston 5/8/16
             case BugTokens.StartParenthesis:
                 var boolCall = self.generateCall(tokens);
                 var peek = tokens[0];
                 //checking immediate next
                 switch(peek){
+                    //if the immediate next is a end paren, check to see if theres another
+                    //boolean statement. Based on return, either recurse or return boolCall
                     case BugTokens.EndParenthesis:
                         var dummy = tokens.shift();
                         var nextToken = tokens[0];
@@ -233,8 +240,12 @@ var BugInterpreter = function(code){
                                 return function(neighbor){
                                     return boolCall(neighbor);
                                 };
+                                //end tertiary switch statement in case- BugTokens.StartParenthesis
                         }
                         break;
+                    //if after boolcall the AND token appears pop off that token
+                    //and recurse on boolean, then check if there is a parenthesis
+                    //if not, return error, if yes then return first boolCall && nextStatement
                     case BugTokens.AND:
                         var dummy =tokens.shift();
                         var nextStatement = self.generateCall(tokens);
@@ -251,6 +262,9 @@ var BugInterpreter = function(code){
                             };
                         }
                         break;
+                    //if after boolcall the OR token appears pop off that token
+                    //and recurse on boolean, then check if there is a parenthesis
+                    //if not, return error, if yes then return first boolCall || nextStatement
                     case BugTokens.OR:
                         var dummy =tokens.shift();
                         var nextStatement = self.generateCall(tokens);
@@ -273,9 +287,10 @@ var BugInterpreter = function(code){
                             " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
                         };
                         return s;
+                        //end secondary switch statement in case- BugTokens.StartParenthesis
 
                 }
-                //end main switch
+                //end main switch statement case- BugTokens.StartParenthesis
                 break;
 
             // If start bracket is found iterates until the end of it and returns an action function of the bracket

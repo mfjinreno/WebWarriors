@@ -1,7 +1,9 @@
 /**
  * Created by Lucas Rodriguez on 4/9/16.
  * A model of the board that the bugs play on.
- * Everything was written by Lucas Rodriguez
+ * (almost) Everything was written by Lucas Rodriguez
+ *
+ * ---CHANGELOG---
  * Edited by Michael Johnston 5/6/16
  * Added cases to getNeighbor, makeMove, and isMove to accept new sLeft etc..
  */

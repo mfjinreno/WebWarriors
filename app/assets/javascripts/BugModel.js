@@ -4,6 +4,7 @@
  *
  * (Almost) Everything was written by Lucas Rodriguez
  *
+ * ---CHANGELOG---
  * Edited by Michael Johnston 5/6/16
  * -Added cases to getGlobalMove to accept new moves turnLeft/turnRight
  * -Added to getGlobalMove's MoveForward statement to convert
