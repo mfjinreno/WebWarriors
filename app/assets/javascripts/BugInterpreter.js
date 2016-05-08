@@ -17,6 +17,9 @@
  * -Removed from boolean function swtich handling and-or
  * -completely re-wrote parenthesis function to handle boolean statements, deleting 
  * all of the work I did yesterday
+ * -Added NOT boolean function.
+ * 
+ *
  */
 
 var BugInterpreter = function(code){
@@ -26,7 +29,7 @@ var BugInterpreter = function(code){
         var token = BugTokens[key];
         if(token == BugTokens.StartBracket || token == BugTokens.EndBracket ||
             token == BugTokens.StartParenthesis || token == BugTokens.EndParenthesis ||
-            token == BugTokens.EndStatement){ token = "\\" + token; }
+            token == BugTokens.EndStatement ){ token = "\\" + token; }
         return token;
     }).reduce(function(a, b) {
         return a + "|" + b;
@@ -127,6 +130,45 @@ var BugInterpreter = function(code){
                 var move = self.generateCall(tokens);
                 return function(neighbor){
                     return move(neighbor);
+                };
+                break;
+
+            case BugTokens.NOT:
+                var nextToken = tokens.shift();
+                if (nextToken == BugTokens.StartParenthesis){
+                    var boolCall = self.generateCall(tokens);
+                    var peek = tokens[0];
+                    switch(peek){
+                        case BugTokens.AND:
+                            var and = tokens.shift();
+                            var nextStatement = self.generateCall(tokens);
+                            return function(neighbor){
+                                return !((boolCall(neighbor))&&(nextStatement(neighbor)));
+                            };
+                            break;
+                        case BugTokens.OR:
+                            var or = tokens.shift();
+                            var nextStatement = self.generateCall(tokens);
+                            return function(neighbor){
+                                return !((boolCall(neighbor))||(nextStatement(neighbor)));
+                            };
+                            break;
+                        case BugTokens.EndParenthesis:
+                            var endParen = tokens.shift();
+                            return function(neighbor){
+                                return !(boolCall(neighbor));
+                            };
+                            break;
+                        default:
+                            return function(){
+                                return 'There was an error parsing' + nextToken + 'in' + BugTokens.NOT +': All not statements must be followed by (booleanPrimativeStatement)';
+                            };
+
+                    }
+                }else{
+                    return function(){
+                        return 'There was an error parsing' + nextToken + 'in' + BugTokens.NOT +': All not statements must be followed by (booleanPrimativeStatement)';
+                    };
                 }
                 break;
 
@@ -243,7 +285,7 @@ var BugInterpreter = function(code){
                                 //end tertiary switch statement in case- BugTokens.StartParenthesis
                         }
                         break;
-                    //if after boolcall the AND token appears pop off that token
+                    //if after boolCall the AND token appears pop off that token
                     //and recurse on boolean, then check if there is a parenthesis
                     //if not, return error, if yes then return first boolCall && nextStatement
                     case BugTokens.AND:
@@ -262,7 +304,7 @@ var BugInterpreter = function(code){
                             };
                         }
                         break;
-                    //if after boolcall the OR token appears pop off that token
+                    //if after boolCall the OR token appears pop off that token
                     //and recurse on boolean, then check if there is a parenthesis
                     //if not, return error, if yes then return first boolCall || nextStatement
                     case BugTokens.OR:

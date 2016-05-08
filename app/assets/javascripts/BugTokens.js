@@ -15,6 +15,7 @@ var BugTokens = {
 
     AND: "and",
     OR: "or",
+    NOT: "not",
 
     If: "if",
     ElsIf: "elsif",

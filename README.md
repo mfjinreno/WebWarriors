@@ -66,3 +66,4 @@ This project was created as an assignment for CSE 3901 at Ohio State. 5 group me
 * Added ELO ranking system to leaderboard for more accurate ranks
 * Added turnRight turnLeft to command list
 * Added boolean AND/OR logic
+* Added boolean NOT function
