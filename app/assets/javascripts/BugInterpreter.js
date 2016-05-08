@@ -17,7 +17,6 @@
 
 var BugInterpreter = function(code){
     var self = this;
-
     // Creates a Regex string of all the token moves
     var mapString = Object.keys(BugTokens).map(function(key){
         var token = BugTokens[key];
@@ -60,96 +59,24 @@ var BugInterpreter = function(code){
             // For boolean tokens returns a function that takes the
             // neighbor as a parameter and returns where statement is true
             case BugTokens.IsEmpty:
-                var peek = tokens[0];
-                switch(peek){
-                    case BugTokens.AND:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isEmpty)&& !!(statement(neighbor)));
-                        };
-                        break;
-                    case BugTokens.OR:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isEmpty)|| !!(statement(neighbor)));
-                        };
-                        break;
-                    default:
-                        return function(neighbor){
-                            return neighbor == BugTokens.IsEmpty;
-                        };
-                } 
+                return function(neighbor){
+                    return (neighbor == BugTokens.IsEmpty);
+                };
                 break;
             case BugTokens.IsEnemy:
-                var peek = tokens[0];
-                switch(peek){
-                    case BugTokens.AND:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isEnemy)&& !!(statement(neighbor)));
-                        };
-                        break;
-                    case BugTokens.OR:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isEnemy)|| !!(statement(neighbor)));
-                        };
-                        break;
-                    default:
-                        return function(neighbor){
-                            return neighbor == BugTokens.IsEnemy;
-                        };
-                } 
+               return function(neighbor){
+                    return (neighbor == BugTokens.IsEnemy);
+                };
                 break;
             case BugTokens.IsFriend:
-                var peek = tokens[0];
-                switch(peek){
-                    case BugTokens.AND:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isFriend)&& !!(statement(neighbor)));
-                        };
-                        break;
-                    case BugTokens.OR:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isFriend)|| !!(statement(neighbor)));
-                        };
-                        break;
-                    default:
-                        return function(neighbor){
-                            return neighbor == BugTokens.IsFriend;
-                        };
-                } 
-                break;
+                return function(neighbor){
+                    return (neighbor == BugTokens.IsFriend);
+                };
+                break;;
             case BugTokens.IsWall:
-                var peek = tokens[0];
-                switch(peek){
-                    case BugTokens.AND:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isWall)&& !!(statement(neighbor)));
-                        };
-                        break;
-                    case BugTokens.OR:
-                        var dummy = tokens.shift();
-                        var statement = self.generateCall(tokens);
-                        return function(neighbor){
-                            return ((neighbor == BugTokens.isWall)|| !!(statement(neighbor)));
-                        };
-                        break;
-                    default:
-                        return function(neighbor){
-                            return neighbor == BugTokens.IsWall;
-                        };
-                } 
+                return function(neighbor){
+                    return (neighbor == BugTokens.IsWall);
+                };
                 break;
 
             // An if boolean condition
@@ -161,7 +88,9 @@ var BugInterpreter = function(code){
                           "BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
                     };
                 }
+
                 var condition = self.generateCall(tokens);
+                
                 var move = self.generateCall(tokens);
                 var nextMove = self.generateCall(tokens);
                 return function(neighbor){
@@ -279,32 +208,74 @@ var BugInterpreter = function(code){
             // If a parenthesis is found iterates until the end of it and returns a function of the boolean
             case BugTokens.StartParenthesis:
                 var boolCall = self.generateCall(tokens);
-                var token = tokens.shift();
-                if(token == BugTokens.EndParenthesis){
-                    var peek = tokens[0];
-                    switch(peek){
-                        case BugTokens.AND:
-                            var dummy = tokens.shift();
-                            var nextCall = self.generateCall(tokens);
-                            return function(neighbor) { return (boolCall(neighbor) && nextCall(neighbor)); };
-                            break;
-                        case BugTokens.OR:
-                            var dummy = tokens.shift();
-                            var nextCall = self.generateCall(tokens);
-                            return function(neighbor) { return (boolCall(neighbor) || nextCall(neighbor)); };
-                            break;
-                        default:
-                            return function(neighbor) { return boolCall(neighbor); }; 
-                    }
-                    
-                } else{
-                    var s = function() {
+                var peek = tokens[0];
+                //checking immediate next
+                switch(peek){
+                    case BugTokens.EndParenthesis:
+                        var dummy = tokens.shift();
+                        var nextToken = tokens[0];
+                        switch(nextToken){
+                            case BugTokens.AND:
+                                tokens.shift();
+                                var nextStatement = self.generateCall(tokens);
+                                return function(neighbor){
+                                    return (!!boolCall(neighbor)) && (!!nextStatement(neighbor));
+                                };
+                                break;
+                            case BugTokens.OR:
+                                tokens.shift();
+                                var nextStatement = self.generateCall(tokens);
+                                return function(neighbor){
+                                    return (!!(boolCall(neighbor)) || !!(nextStatement(neighbor)));
+                                };
+                                break;
+                            default:
+                                return function(neighbor){
+                                    return boolCall(neighbor);
+                                };
+                        }
+                        break;
+                    case BugTokens.AND:
+                        var dummy =tokens.shift();
+                        var nextStatement = self.generateCall(tokens);
+                        var endParen = tokens.shift();
+                        if (endParen!=BugTokens.EndParenthesis){
+                            var s = function() {
+                                return "There was an error parsing " + token + " in " + BugTokens.StartParenthesis +
+                                " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
+                             };
+                            return s;
+                        }else{
+                            return function(neighbor){
+                                return (!!(boolCall(neighbor))&&(!!nextStatement(neighbor)));
+                            };
+                        }
+                        break;
+                    case BugTokens.OR:
+                        var dummy =tokens.shift();
+                        var nextStatement = self.generateCall(tokens);
+                        var endParen = tokens.shift();
+                        if (endParen!=BugTokens.EndParenthesis){
+                            var s = function() {
+                                return "There was an error parsing " + token + " in " + BugTokens.StartParenthesis +
+                                " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
+                             };
+                            return s;
+                        }else{
+                            return function(neighbor){
+                                return (!!(boolCall(neighbor))||(!!nextStatement(neighbor)));
+                            };
+                        }
+                        break;
+                    default:
+                        var s = function() {
                         return "There was an error parsing " + token + " in " + BugTokens.StartParenthesis +
                             " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
-                    };
-                    return s;
+                        };
+                        return s;
 
                 }
+                //end main switch
                 break;
 
             // If start bracket is found iterates until the end of it and returns an action function of the bracket

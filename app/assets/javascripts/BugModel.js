@@ -2,7 +2,8 @@
  * Created by Lucas Rodriguez on 4/9/16.
  * A Mode representing a Bug
  *
- * Everything was written by Lucas Rodriguez
+ * (Almost) Everything was written by Lucas Rodriguez
+ *
  * Edited by Michael Johnston 5/6/16
  * -Added cases to getGlobalMove to accept new moves turnLeft/turnRight
  * -Added to getGlobalMove's MoveForward statement to convert
