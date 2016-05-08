@@ -3,9 +3,9 @@
 
 ## Install
 * sudo apt-get install ImageMagick
+* bundle install
 * rake db:migrate
 * rake db:setup
-* bundle install
 * rails server
 * Go to http://localhost:3000
 
@@ -16,8 +16,7 @@
 * Documentation: Nathan Borak
 
 ## Contributions
-Please list who did what for each part of the project.
-Also list if people worked together (pair programmed) on a particular section.
+This project was created as an assignment for CSE 3901 at Ohio State. 5 group members contributed in varying degrees. I (Michael Johnston), with the consent of the group, have now taken continuing it as a personal project, as the idea for a Bugs Language game has been a dream of mine for almost a year before the class began. Below are the contributions of members during the time we worked on it as a team. My contributions after the final submission will be listed at the bottom. -MJ
 
 ### Nathan Borak
 * JS testing, profile page logic, profile pictures
@@ -52,6 +51,7 @@ Also list if people worked together (pair programmed) on a particular section.
 * Created JQuery functions for RGB selection on Bug Builder
 * Created and styled navbar and template for pages
 * Created images for various bug types
+* (After project submission and as personal project)
 
 ### Yuze Chen
 * Implemented Leaderboard page. Joins bugs and bug_stats tables and show all bugs with their stats.  
@@ -62,3 +62,7 @@ Also list if people worked together (pair programmed) on a particular section.
 * Implemented contest table in home view
 * Testing javascript using QUnit
 
+### Michael Johnston (After Project submission)
+* Added ELO ranking system to leaderboard for more accurate ranks
+* Added turnRight turnLeft to command list
+* Added boolean AND/OR logic
