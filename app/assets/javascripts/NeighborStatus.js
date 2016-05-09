@@ -6,5 +6,15 @@ var NeighborStatus = {
     IsEmpty: "isEmpty",
     IsEnemy: "isEnemy",
     IsFriend: "isFriend",
-    IsWall: "isWall"
+    IsWall: "isWall",
+    
+    IsEmptyLeft: "isEmptyLeft",
+    IsEnemyLeft: "isEnemyLeft",
+    IsFriendLeft: "isFriendLeft",
+    IsWallLeft: "isWallLeft",
+
+    IsEmptyRight: "isEmptyRight",
+    IsEnemyRight: "isEnemyRight",
+    IsFriendRight: "isFriendRight",
+    IsWallRight: "isWallRight"
 };

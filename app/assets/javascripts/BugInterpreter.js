@@ -67,22 +67,66 @@ var BugInterpreter = function(code){
             // neighbor as a parameter and returns where statement is true
             case BugTokens.IsEmpty:
                 return function(neighbor){
-                    return (neighbor == BugTokens.IsEmpty);
+                    return (neighbor[0] == BugTokens.IsEmpty);
                 };
                 break;
             case BugTokens.IsEnemy:
                return function(neighbor){
-                    return (neighbor == BugTokens.IsEnemy);
+                    return (neighbor[0] == BugTokens.IsEnemy);
                 };
                 break;
             case BugTokens.IsFriend:
                 return function(neighbor){
-                    return (neighbor == BugTokens.IsFriend);
+                    return (neighbor[0] == BugTokens.IsFriend);
                 };
                 break;;
             case BugTokens.IsWall:
                 return function(neighbor){
-                    return (neighbor == BugTokens.IsWall);
+                    return (neighbor[0] == BugTokens.IsWall);
+                };
+                break;
+
+            //right cases
+            case BugTokens.IsEmptyRight:
+                return function(neighbor){
+                    return (neighbor[1] == BugTokens.IsEmptyRight);
+                };
+                break;
+            case BugTokens.IsEnemyRight:
+               return function(neighbor){
+                    return (neighbor[1] == BugTokens.IsEnemyRight);
+                };
+                break;
+            case BugTokens.IsFriendRight:
+                return function(neighbor){
+                    return (neighbor[1] == BugTokens.IsFriendRight);
+                };
+                break;;
+            case BugTokens.IsWallRight:
+                return function(neighbor){
+                    return (neighbor[1] == BugTokens.IsWallRight);
+                };
+                break;
+
+            //left cases
+            case BugTokens.IsEmptyLeft:
+                return function(neighbor){
+                    return (neighbor[2] == BugTokens.IsEmptyLeft);
+                };
+                break;
+            case BugTokens.IsEnemyLeft:
+               return function(neighbor){
+                    return (neighbor[2] == BugTokens.IsEnemyLeft);
+                };
+                break;
+            case BugTokens.IsFriendLeft:
+                return function(neighbor){
+                    return (neighbor[2] == BugTokens.IsFriendLeft);
+                };
+                break;;
+            case BugTokens.IsWallLeft:
+                return function(neighbor){
+                    return (neighbor[2] == BugTokens.IsWallLeft);
                 };
                 break;
 
@@ -91,38 +135,58 @@ var BugInterpreter = function(code){
                 var peek = tokens[0];
                 if(peek != BugTokens.StartParenthesis){
                     return function(){
-                        return "All if statements must be preceded by a '( )' statement. " +
+                        return "All if statements must be followed by a '( )' statement. " +
                           "BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
                     };
                 }
 
                 var condition = self.generateCall(tokens);
-                
                 var move = self.generateCall(tokens);
-                var nextMove = self.generateCall(tokens);
-                return function(neighbor){
-                    if(condition(neighbor)) {
-                        return move(neighbor);
-                    }
-                    else {
-                        return nextMove(neighbor);
-                    }
-                };
+                if (tokens.length == 0){
+                    return function(neighbor){
+                        if(condition(neighbor)){
+                            return move(neighbor);
+                        }else {
+                            return BugTokens.Infect; 
+                        }
+                    };
+                }else{
+                    var nextMove = self.generateCall(tokens);
+                    return function(neighbor){
+                        if(condition(neighbor)) {
+                            return move(neighbor);
+                        }
+                        else {
+                            return nextMove(neighbor);
+                        }
+                    };
+                }
+                
                 break;
 
             // Else if boolean condition
             case BugTokens.ElsIf:
                 var condition = self.generateCall(tokens);
                 var move = self.generateCall(tokens);
-                var nextMove = self.generateCall(tokens);
-                return function(neighbor){
-                    if(condition(neighbor)) {
-                        return move(neighbor);
-                    }
-                    else {
-                        return nextMove(neighbor);
-                    }
-                };
+                if (tokens.length == 0){
+                    return function(neighbor){
+                        if(condition(neighbor)){
+                            return move(neighbor);
+                        }else {
+                            return BugTokens.Infect; 
+                        }
+                    };
+                }else{
+                    var nextMove = self.generateCall(tokens);
+                    return function(neighbor){
+                        if(condition(neighbor)) {
+                            return move(neighbor);
+                        }
+                        else {
+                            return nextMove(neighbor);
+                        }
+                    };
+                }
                 break;
 
             // Else condition
@@ -130,6 +194,18 @@ var BugInterpreter = function(code){
                 var move = self.generateCall(tokens);
                 return function(neighbor){
                     return move(neighbor);
+                };
+                break;
+
+            case BugTokens.TRUE:
+                return function(){
+                    return true;
+                };
+                break;
+
+            case BugTokens.FALSE:
+                return function(){
+                    return false;
                 };
                 break;
 

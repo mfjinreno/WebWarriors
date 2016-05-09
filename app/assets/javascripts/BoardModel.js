@@ -142,6 +142,229 @@ var BoardModel = function(size){
         }
     };
 
+
+    //Gets the RIGHT Neighbor
+    self.getNeighborRight = function(bug){
+        var position = self.getPosition(bug);
+        if(!position) { return; }
+        var row = position[0];
+        var column = position[1];
+
+        // Switch case based on what direction the bug is facing
+        switch(bug.direction){
+            case BugsMoves.Left:
+                if(row == 0) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row-1][column]) {
+                        return self.board[row-1][column].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.Right:
+                if(row == self.size - 1) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row+1][column]) {
+                        return self.board[row+1][column].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.Up:
+                if(column == self.size-1) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row][column+1]) {
+                        return self.board[row][column+1].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.Down:
+                if(column == 0) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row][column-1]) {
+                        return self.board[row][column-1].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.SLeft:
+                if(row == 0) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row-1][column]) {
+                        return self.board[row-1][column].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.SRight:
+                if(row == self.size - 1) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row+1][column]) {
+                        return self.board[row+1][column].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.SUp:
+                if(column == self.size-1) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row][column+1]) {
+                        return self.board[row][column+1].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            case BugsMoves.SDown:
+                if(column == 0) { return NeighborStatus.IsWallRight; }
+                else {
+                    if(self.board[row][column-1]) {
+                        return self.board[row][column-1].team == bug.team ?
+                            NeighborStatus.IsFriendRight :
+                            NeighborStatus.IsEnemyRight;
+                    } else{
+                        return NeighborStatus.IsEmptyRight;
+                    }
+                }
+                break;
+            default:
+                alert("Error processing bug neighbor");
+                break;
+        }
+    };
+
+    // Gets the LEFT neighbor of the bug
+    self.getNeighborLeft = function(bug){
+        var position = self.getPosition(bug);
+        if(!position) { return; }
+        var row = position[0];
+        var column = position[1];
+
+        // Switch case based on what direction the bug is facing
+        switch(bug.direction){
+            case BugsMoves.Left:
+                if(row == self.size -1) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row+1][column]) {
+                        return self.board[row+1][column].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.Right:
+                if(row == 0) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row-1][column]) {
+                        return self.board[row-1][column].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.Up:
+                if(column == 0) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row][column-1]) {
+                        return self.board[row][column-1].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.Down:
+                if(column == self.size - 1) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row][column+1]) {
+                        return self.board[row][column+1].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.SLeft:
+                if(row == self.size -1) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row+1][column]) {
+                        return self.board[row+1][column].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.SRight:
+                if(row == 0) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row-1][column]) {
+                        return self.board[row-1][column].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.SUp:
+                if(column == 0) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row][column-1]) {
+                        return self.board[row][column-1].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            case BugsMoves.SDown:
+                if(column == self.size - 1) { return NeighborStatus.IsWallLeft; }
+                else {
+                    if(self.board[row][column+1]) {
+                        return self.board[row][column+1].team == bug.team ?
+                            NeighborStatus.IsFriendLeft :
+                            NeighborStatus.IsEnemyLeft;
+                    } else{
+                        return NeighborStatus.IsEmptyLeft;
+                    }
+                }
+                break;
+            default:
+                alert("Error processing bug neighbor");
+                break;
+        }
+    };
+
     // Sets the position of the bug
     self.setPosition = function(bug, row, column){
         if(!self.board[row][column]){

@@ -13,14 +13,27 @@ var BugTokens = {
     IsFriend: "isFriend",
     IsWall: "isWall",
 
+    IsEmptyLeft: "isEmptyLeft",
+    IsEnemyLeft: "isEnemyLeft",
+    IsFriendLeft: "isFriendLeft",
+    IsWallLeft: "isWallLeft",
+
+    IsEmptyRight: "isEmptyRight",
+    IsEnemyRight: "isEnemyRight",
+    IsFriendRight: "isFriendRight",
+    IsWallRight: "isWallRight",
+
     AND: "and",
     OR: "or",
     NOT: "not",
+    TRUE: "True",
+    FALSE: "False",
 
     If: "if",
     ElsIf: "elsif",
     Else: "else",
 
+    Stop: "stop",
     MoveForward: "moveForward",
     MoveLeft: "moveLeft",
     MoveRight: "moveRight",

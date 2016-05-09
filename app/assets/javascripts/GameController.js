@@ -35,7 +35,11 @@ var GameController = function(bugs, size, bugsCount){
     // updates the board
     self.runRound = function(){
       self.board.getBugs().forEach(function(el){
-          var neighbor = self.board.getNeighbor(el);
+
+          var neighbor = new Array(3);
+          neighbor[0] = self.board.getNeighbor(el);
+          neighbor[1] = self.board.getNeighborRight(el);
+          neighbor[2] = self.board.getNeighborLeft(el);
           var move = el.makeMove(neighbor);
           self.board.makeMove(el, move);
       });

@@ -1,5 +1,4 @@
-# Project 6
-## Ruby on Rails Project
+# WebWarriors
 
 ## Install
 * sudo apt-get install ImageMagick
@@ -8,12 +7,6 @@
 * rake db:setup
 * rails server
 * Go to http://localhost:3000
-
-## Roles
-* Overall Project Manager: Lucas Rodriguez
-* Coding Manager: Michael Johnston
-* Testing Manager: Alex Kaps
-* Documentation: Nathan Borak
 
 ## Contributions
 This project was created as an assignment for CSE 3901 at Ohio State. 5 group members contributed in varying degrees. I (Michael Johnston), with the consent of the group, have now taken continuing it as a personal project, as the idea for a Bugs Language game has been a dream of mine for almost a year before the class began. Below are the contributions of members during the time we worked on it as a team. My contributions after the final submission will be listed at the bottom. -MJ
