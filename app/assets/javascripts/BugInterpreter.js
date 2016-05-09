@@ -18,6 +18,11 @@
  * -completely re-wrote parenthesis function to handle boolean statements, deleting 
  * all of the work I did yesterday
  * -Added NOT boolean function.
+ * -Fixed error where parser denies an if statement without else{} by
+ * adding Stop function if there is no following else. Makes parser happy.
+ * -added true/false primitives
+ * -added cases for is_Left is_Right
+ * -Added case for Stop token
  * 
  *
  */
@@ -147,7 +152,7 @@ var BugInterpreter = function(code){
                         if(condition(neighbor)){
                             return move(neighbor);
                         }else {
-                            return BugTokens.Infect; 
+                            return BugTokens.Stop; 
                         }
                     };
                 }else{
@@ -173,7 +178,7 @@ var BugInterpreter = function(code){
                         if(condition(neighbor)){
                             return move(neighbor);
                         }else {
-                            return BugTokens.Infect; 
+                            return BugTokens.Stop; 
                         }
                     };
                 }else{
@@ -326,6 +331,18 @@ var BugInterpreter = function(code){
                     };
                 }
                 break;
+            case BugTokens.Stop:
+                var token = tokens.shift();
+                if(token == BugTokens.EndStatement){
+                    return function() { return BugTokens.Stop; };
+                } else{
+                    return function() {
+                        return 'There was an error parsing ' + token + ' in ' + BugTokens.Stop +
+                            " BEFORE: " + (tokens.length > 0 ? tokens.reduce(function(a, b){return a + ", " + b}) : "");
+                    };
+                }
+                break;
+
 
             // If a parenthesis is found iterates until the end of it and returns a function of the boolean
             //re-written by Michael Johnston 5/8/16

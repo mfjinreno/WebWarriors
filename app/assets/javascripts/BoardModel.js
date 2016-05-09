@@ -6,6 +6,12 @@
  * ---CHANGELOG---
  * Edited by Michael Johnston 5/6/16
  * Added cases to getNeighbor, makeMove, and isMove to accept new sLeft etc..
+ *
+ * Edited by Michael Johnston 5/8/16
+ * -added getNeighborRight/getNeighborLeft. Returns value of that cell.
+ * -added stop to makeMove and isMove
+ *
+ *
  */
 var BoardModel = function(size){
     var self = this;
@@ -424,7 +430,9 @@ var BoardModel = function(size){
                   self.board[row][column] = bug;
                   bug.direction = move;
                   break;
-
+              case BugsMoves.Stop:
+                  self.board[row][column] = bug;
+                  break;
               case BugsMoves.Infect:
                   switch(bug.direction){
                       case BugsMoves.Left:
@@ -518,6 +526,9 @@ var BoardModel = function(size){
                 return true;
                 break;
             case BugsMoves.SDown:
+                return true;
+                break;
+            case BugsMoves.Stop:
                 return true;
                 break;
             case BugsMoves.Infect:

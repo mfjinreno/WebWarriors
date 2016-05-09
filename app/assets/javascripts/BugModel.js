@@ -12,6 +12,9 @@
  * and original just passed whatever current global instruction was
  * loaded before.
  *
+ * Edited by Michael Johnston 5/8/16
+ * -Added case to getGlobalMove for stop. Returns stop move.
+ *
  */
 
 // A function to generate the id of each bug
@@ -196,6 +199,9 @@ var BugModel = function(team, direction, bug){
                         return BugsMoves.SDown;
                         break;
                 }
+                break;
+            case BugTokens.Stop:
+                return BugsMoves.Stop;
                 break;
             case BugTokens.Infect:
                 return BugsMoves.Infect;

@@ -14,5 +14,6 @@ var BugsMoves =  {
     SLeft: 'sleft',
     SDown: 'sdown',
     SUp: 'sup',
-    Infect: 'infect'
+    Infect: 'infect',
+    Stop: 'stop'
 };

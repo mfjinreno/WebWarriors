@@ -1,6 +1,9 @@
 /**
  * Created by Lucas Rodriguez on 4/9/16.
  * A object that controls all the game
+ *
+ * Edited by Michael Johnston 5/8/16
+ * -changed neighbor to array, which takes front->[0] right->[1] left->[2] 
  */
 var GameController = function(bugs, size, bugsCount){
     var self = this;

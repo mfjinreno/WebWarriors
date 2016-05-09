@@ -4,7 +4,13 @@
  *
  * ---CHANGELOG---
  * Edited by Michael Johnston 5/6/16
- * Added turnLeft, turnRight tokens
+ * -Added turnLeft, turnRight tokens
+ *
+ * Edited by Michael Johnston 5/8/16
+ * -Added Not
+ * -Added is_Left/is_Right functions
+ * -Added Stop function
+ * -added True/False
  */
 
 var BugTokens = {
